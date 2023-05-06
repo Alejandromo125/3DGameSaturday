@@ -52,7 +52,10 @@ public class Lock : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.E) && CanOpen && !locked)
+        {
+            key.SetBool("useKey", CheckTheKey());
+        }
     }
 
     private void OnTriggerEnter(Collider other)
