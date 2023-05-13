@@ -21,12 +21,13 @@ public class LevelGenerator : MonoBehaviour
 
         foreach(ColorToPrefab colorMapping in colorMappings) 
         {
-            Debug.Log("Checking color");
+            Debug.Log(colorMapping.color);
+            Debug.Log(pixelColor);
             if(colorMapping.color.Equals(pixelColor)) 
             {
                 Debug.Log("Creating prefab");
                 Vector3 position = new Vector3(x, 0, z) * offset;
-                Instantiate(colorMapping.prefab,position,Quaternion.identity);
+                Instantiate(colorMapping.prefab,position,Quaternion.identity,transform);
             }
         }
     }
