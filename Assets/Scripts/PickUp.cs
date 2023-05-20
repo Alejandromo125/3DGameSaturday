@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PickUp : MonoBehaviour
 {
+    public AudioClip pickClip;
     void Update()
     {
         Rotation();
@@ -11,6 +12,7 @@ public class PickUp : MonoBehaviour
     public virtual void Picked()
     {
         Debug.Log("Picked up");
+        GameManager.gameManager.PlayClip(pickClip); 
         Destroy(this.gameObject);
     }
     public void Rotation()
