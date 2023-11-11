@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +10,6 @@ public class GameManager : MonoBehaviour
     bool gamePaused = false;
     bool endGame = false;
     bool win = false;
-
     public int redKey = 0;
     public int greenKey = 0;
     public int goldKey = 0;
@@ -20,32 +20,49 @@ public class GameManager : MonoBehaviour
     public AudioClip pauseClip;
     public AudioClip winClip;
     public AudioClip loseClip;
+
+    public Text timeText;
+    public Text goldKeyText;
+    public Text redKeyText;
+    public Text greenKeyText;
+    public Text crystalText;
+    public Image snowFlake;
+    public GameObject infoPanel;
+    public Text pauseEnd;
+    public Text reloadInfo;
+    public Text useInfo;
     public void FreezTime(int freez)
     {
         CancelInvoke("Stopper");
+        snowFlake.enabled = true;
         InvokeRepeating("Stopper", freez, 1);
     }
     public void AddPoints(int point)
     {
         points += point;
+        crystalText.text = points.ToString();
     }
     public void AddTime(int addTime)
     {
         timeToEnd += addTime;
+        timeText.text = timeToEnd.ToString();
     }
     public void AddKey(KeyColor color)
     {
         if (color == KeyColor.Gold)
         {
             goldKey++;
+            goldKeyText.text = goldKey.ToString();
         }
         else if (color == KeyColor.Green)
         {
             greenKey++;
+            greenKeyText.text = greenKey.ToString();
         }
         else if (color == KeyColor.Red)
         {
             redKey++;
+            redKeyText.text = redKey.ToString();
         }
     }
     void Start()
@@ -59,7 +76,11 @@ public class GameManager : MonoBehaviour
        {
             timeToEnd = 100;
        }
-
+        snowFlake.enabled = false;
+        timeText.text = timeToEnd.ToString();
+        infoPanel.SetActive(false);
+        reloadInfo.text = "";
+        SetUseInfo("");
         Debug.Log("Time: " + timeToEnd + " s");
         audioSource = GetComponent<AudioSource>();
         InvokeRepeating("Stopper", 2, 1);
@@ -93,7 +114,8 @@ public class GameManager : MonoBehaviour
     {
         timeToEnd--;
         Debug.Log("Time: " + timeToEnd + " s");
-        
+        timeText.text = timeToEnd.ToString();
+        snowFlake.enabled = true;
         if (timeToEnd <= 0)
         {
             timeToEnd = 0;
@@ -108,30 +130,44 @@ public class GameManager : MonoBehaviour
 
     public void PauseGame()
     {
-        PlayClip(pauseClip);
-        Debug.Log("Pause Game");
-        Time.timeScale = 0f;
-        gamePaused = true;
+        if(!endGame)
+        {
+            PlayClip(pauseClip);
+            infoPanel.SetActive(true);
+            Debug.Log("Pause Game");
+            Time.timeScale = 0f;
+            gamePaused = true;
+        }
     }
 
     public void ResumeGame()
     {
-        PlayClip(resumeClip);
-        Debug.Log("Resume Game");
-        Time.timeScale = 1f;
-        gamePaused = false;
+        if(!endGame)
+        {
+            PlayClip(resumeClip);
+            infoPanel.SetActive(false);
+            Debug.Log("Resume Game");
+            Time.timeScale = 1f;
+            gamePaused = false;
+        }
     }
 
     public void EndGame()
     {
         CancelInvoke("Stopper");
+        infoPanel.SetActive(true);
+        Time.timeScale = 0f;
         if (win)
         {
             PlayClip(winClip);
+            pauseEnd.text = "You WIN!!!!";
+            reloadInfo.text = "Reload? Y/N";
             Debug.Log("You Win!!! Reoad?");
         } else
         {
             PlayClip(loseClip);
+            pauseEnd.text = "You LOSE!!!!";
+            reloadInfo.text = "Reload? Y/N";
             Debug.Log("You Lose!!! Reload?");
         }
     }
@@ -140,5 +176,10 @@ public class GameManager : MonoBehaviour
     {
         audioSource.clip = playClip;
         audioSource.Play();
+    }
+
+    public void SetUseInfo(string info)
+    {
+        useInfo.text = info;
     }
 }

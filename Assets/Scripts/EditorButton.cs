@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(LevelGenerator))]
-public class EditorButton : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        DrawDefaultInspector();
+//[CustomEditor(typeof(LevelGenerator))]
+public class EditorButton : MonoBehaviour { }
 
-        LevelGenerator generator = (LevelGenerator)target;
+    //public override void OnInspectorGUI()
+    //{
+    //    DrawDefaultInspector();
 
-        if(GUILayout.Button("Create labirynth"))
-        {
-            generator.GenerateLabirynth();
-        }
-    }
-}
+    //    LevelGenerator generator = (LevelGenerator)target;
+
+    //    if(GUILayout.Button("Create labirynth"))
+    //    {
+    //        generator.GenerateLabirynth();
+    //    }
+    //}
+
